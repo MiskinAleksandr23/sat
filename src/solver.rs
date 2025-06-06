@@ -173,8 +173,8 @@ impl DpllSolver {
         self.formula.iter().all(|clause| {
             clause.iter().any(|lit| {
                 let var = lit.abs() as usize;
-                (self.assigned_values[var] > 0 && *lit > 0) ||
-                    (self.assigned_values[var] < 0 && *lit < 0)
+                (self.assigned_values[var] > 0 && *lit > 0)
+                    || (self.assigned_values[var] < 0 && *lit < 0)
             })
         })
     }
@@ -188,7 +188,9 @@ impl DpllSolver {
                     self.unassigned_variables += 1;
 
                     for (i, clause) in self.formula.iter().enumerate() {
-                        if self.active_variables[i] == 0 && clause.iter().any(|lit| lit.abs() as usize == var) {
+                        if self.active_variables[i] == 0
+                            && clause.iter().any(|lit| lit.abs() as usize == var)
+                        {
                             self.active_variables[i] = 1;
                         }
                     }
