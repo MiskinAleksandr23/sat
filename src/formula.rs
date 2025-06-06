@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub enum SatResult {
     SAT,
     UNSAT,

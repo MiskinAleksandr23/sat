@@ -6,27 +6,29 @@ use std::path::Path;
 
 use crate::formula::CnfFormula;
 
-pub fn parse_formula_from_cnf_file<P: AsRef<Path>>(path: P) -> Result<CnfFormula, std::io::Error> {
-    let mut clauses: Vec<Vec<i32>> = Vec::new();
+pub fn parse_formula_from_cnf_file<P: AsRef<Path>>(path: P) -> Result<CnfFormula, io::Error> {
     let file = fs::File::open(path)?;
     let reader = io::BufReader::new(file);
 
-    let mut read_header = false;
+    let mut clauses: Vec<Vec<i32>> = Vec::new();
+    let mut header_found = false;
 
     for line in reader.lines() {
         let line = line?;
-        if line.starts_with("c") {
+        let line = line.trim();
+
+        if line.is_empty() || line.starts_with('c') {
             continue;
         }
 
         if line.starts_with("p") {
-            if read_header {
+            if header_found {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::Other,
                     "parse error",
                 ));
             }
-            read_header = true;
+            header_found = true;
         } else {
             let mut clause: Vec<i32> = line
                 .split_whitespace()
